@@ -18,8 +18,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const newPost = await Posts.insert(req.body);
-    res.status(201).json(newPost);
+    const newPost = { ...req.body, user_id: req.params.id };
+    const message = await Posts.insert(newPost);
+    res.status(201).json(message);
   }
   catch (error) {
     console.log(error);
@@ -49,7 +50,8 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
    try {
-     const post = await Posts.update(req.params.id, req.body);
+     const post = await Posts.update(req.params.id, req.body)
+     
      if(post) {
        res.status(200).json(post);
      }
